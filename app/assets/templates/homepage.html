@@ -11,7 +11,8 @@
     </div>
     <div class="content">
 
-        <div class="form" ng-class="{ 'loading': loading }">
+        <div class="form" ng-class="{ 'loading': loading }" ng-show="analyzeMode">
+
             <form>
                 <fieldset>
                     <legend>
@@ -27,20 +28,54 @@
                     </button>
                 </fieldset>
             </form>
-            <button>
-                Correlation
+            <button ng-click="enableCorrelationMode()" ng-show="analyzeMode">
+                Correlation check
             </button>
 
             <span class="throbber"></span>
 
         </div>
 
+        <div class="form" ng-class="{ 'loading': loading }" ng-show="correlationMode">
+
+            <h3>Correlation check between two datasets. Each array should contain at least 3 different numbers.</h3>
+
+            <form>
+                <fieldset>
+                    <legend>
+                        Enter 2 arrays of data of equal length
+                    </legend>
+
+                    <textarea placeholder="enter first array" ng-model="dataset1" ng-disabled="loading">
+
+                    </textarea>
+
+                    <textarea placeholder="enter second array" ng-model="dataset2" ng-disabled="loading">
+
+                    </textarea>
+
+                    <button
+                            ng-disabled="loading"
+                            ng-click="correlate()" ng-show="correlationMode">
+                        Calculate
+                    </button>
+                </fieldset>
+            </form>
+            <button ng-click="enableAnalyzeMode()">
+                Back
+            </button>
+
+            <span class="throbber"></span>
+
+        </div>
+
+
         <div class="results">
 
             <h2>
                 Results
             </h2>
-            <div>
+            <div ng-show="analyzeMode">
                 <p>Average: {{ results.average }} </p>
                 <p>Min: {{ results.min }} </p>
                 <p>Max: {{ results.max }} </p>
@@ -48,6 +83,9 @@
                 <p>Median: {{ results.median }} </p>
                 <p>Q3: {{ results.q3 }} </p>
                 <p>Outliers: {{ results.outliers }} </p>
+            </div>
+            <div ng-show="correlationMode">
+                Correlation results
             </div>
 
         </div>
