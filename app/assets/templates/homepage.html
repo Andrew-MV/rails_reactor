@@ -11,16 +11,18 @@
     </div>
     <div class="content">
 
-        <div class="form">
+        <div class="form" ng-class="{ 'loading': loading }">
             <form>
                 <fieldset>
                     <legend>
                         Input numbers 1,2,3,4,5,6 or smth like that
                     </legend>
-                 <textarea placeholder="enter data" ng-model="dataset">
+                 <textarea placeholder="enter data" ng-model="dataset" ng-disabled="loading">
 
                  </textarea>
-                    <button ng-click="analyze()">
+                    <button
+                            ng-disabled="loading"
+                            ng-click="analyze()">
                         Analyze
                     </button>
                 </fieldset>
@@ -28,6 +30,8 @@
             <button>
                 Correlation
             </button>
+
+            <span class="throbber"></span>
 
         </div>
 
