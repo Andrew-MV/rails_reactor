@@ -1,4 +1,4 @@
-var reactorApp = angular.module('reactorApp', ['ngRoute', 'templates']);
+var reactorApp = angular.module('reactorApp', ['ngRoute', 'templates', 'cgNotify']);
 
 reactorApp
     .config(function($routeProvider, $locationProvider, $httpProvider) {

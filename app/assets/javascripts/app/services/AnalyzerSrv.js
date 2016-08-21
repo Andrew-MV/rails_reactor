@@ -12,7 +12,7 @@ reactorApp.factory('AnalyserSrv', function($http, $q) {
                 defer.resolve(response.data);
             }).catch(function (error) {
                 //console.log(error, 'error')
-                defer.reject(error);
+                defer.reject(error.data.message);
             });
             return defer.promise;
         }

@@ -1,17 +1,25 @@
-reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv) {
+reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, NotifierSrv) {
+
+    $scope.loading = false;
 
     $scope.results = {};
 
     $scope.analyze = function() {
-        $scope.results = AnalyserSrv.analyze($scope.dataset)
+        if ($scope.loading) {
+            return;
+        };
+        $scope.loading = true;
+        AnalyserSrv
+            .analyze($scope.dataset)
             .then(function(result) {
                 //console.log('inside then');
                 $scope.results = result;
+                $scope.loading = false;
             })
-            .catch(function(error) {
-                //console.log('inside catch');
+            .catch(function(message) {
+                NotifierSrv.error(message)
+                $scope.loading = false;
             });
-        //console.log('analyyyyse');
     };
 
 });
