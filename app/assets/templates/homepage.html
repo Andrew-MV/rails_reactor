@@ -39,7 +39,7 @@
             </form>
         </div>
 
-        <div class="form" ng-class="{ 'loading': loading }" ng-show="analyzeMode">
+        <div class="form" ng-class="{ 'loading': loading }" ng-show="!isUnauthorized() && analyzeMode">
 
             <form>
                 <fieldset>
