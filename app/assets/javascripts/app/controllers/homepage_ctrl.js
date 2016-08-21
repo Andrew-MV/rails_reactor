@@ -1,4 +1,4 @@
-reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, NotifierSrv) {
+reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, NotifierSrv, AuthorizationSrv) {
 
     $scope.loading = false;
     $scope.results = {};
@@ -13,7 +13,6 @@ reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, Notif
         AnalyserSrv
             .analyze($scope.dataset)
             .then(function(result) {
-                //console.log('inside then');
                 $scope.results = result;
             })
             .catch(function(message) {
@@ -25,7 +24,6 @@ reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, Notif
     };
 
     $scope.correlate = function() {
-        //console.log('this method works')
         if ($scope.loading) {
             return;
         }
@@ -52,6 +50,57 @@ reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, Notif
     $scope.enableCorrelationMode = function() {
         $scope.analyzeMode = false;
         $scope.correlationMode = true;
+    };
+
+    $scope.signUp = function() {
+        // if ($scope.loading) {
+        //     return;
+        // }
+        //$scope.loading = true;
+        AuthorizationSrv
+            .signUp($scope.login, $scope.password)
+            .then(function(result) {
+            })
+            .catch(function(message) {
+                //NotifierSrv.error(message)
+            })
+            .finally(function() {
+                //$scope.loading = false;
+            });
+    };
+
+    $scope.signIn = function() {
+        // if ($scope.loading) {
+        //     return;
+        // }
+        //$scope.loading = true;
+        AuthorizationSrv
+            .signIn($scope.login, $scope.password)
+            .then(function(result) {
+            })
+            .catch(function(message) {
+                //NotifierSrv.error(message)
+            })
+            .finally(function() {
+                //$scope.loading = false;
+            });
+    };
+
+    $scope.logOut = function() {
+        // if ($scope.loading) {
+        //     return;
+        // }
+        //$scope.loading = true;
+        AuthorizationSrv
+            .logOut()
+            .then(function(result) {
+            })
+            .catch(function(message) {
+                //NotifierSrv.error(message)
+            })
+            .finally(function() {
+                //$scope.loading = false;
+            });
     };
 
 });
