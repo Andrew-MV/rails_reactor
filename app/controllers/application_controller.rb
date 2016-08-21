@@ -48,5 +48,33 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def correlate
+    dataset1 = params[:dataset1].to_s.strip
+    dataset2 = params[:dataset2].to_s.strip
+    if dataset1.empty?
+      render json: {
+          message: 'Empty dataset'
+      }, status: 422
+    else
+      dataset1 = dataset1.split(',')
+
+      if dataset1.size < 3
+        render json: {
+            message: 'Enter at least 3 numbers'
+        }, status: 422
+      elsif dataset1.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
+        render json: {
+            message: 'Wrong data'
+        }, status: 422
+      else
+        input1 = dataset1.map { |num| num.strip.to_i }
+        output = {}
+        output[:answer] = 'answer'
+        render json: {
+            correlation: output[:answer]
+        }
+      end
+    end
+  end
 
 end
