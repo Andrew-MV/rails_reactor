@@ -10,7 +10,8 @@
   %body
 
   .app-main{'ng-app' => 'reactorApp'}
-    .main-view{'ng-view' => true}
+    .app-controller{'ng-controller' => 'ApplicationCtrl'}
+      .main-view{'ng-view' => true}
 
 
   = yield

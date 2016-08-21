@@ -4,12 +4,40 @@
         <h1 class="page-title">
             Datasets analysis
         </h1>
-        <button>
-            Sign out
+        <button ng-click="logOut()" ng-show="!isUnauthorized()">
+            Log out
         </button>
 
     </div>
     <div class="content">
+
+        <div class="authorization" ng-show="isUnauthorized()">
+
+            <div class="tabs">
+                <span>Sign up</span>
+                <span>Sign in</span>
+            </div>
+
+            <form>
+                <fieldset>
+                    <legend>
+                        Sign up
+                    </legend>
+                    <input type="text" placeholder="login" ng-model="login">
+                    <input type="password" placeholder="password" ng-model="password">
+                    <button
+                        ng-disabled=""
+                        ng-click="signUp()">
+                        Sign up
+                    </button>
+                    <button
+                            ng-disabled=""
+                            ng-click="signIn()">
+                        Sign in
+                    </button>
+                </fieldset>
+            </form>
+        </div>
 
         <div class="form" ng-class="{ 'loading': loading }" ng-show="analyzeMode">
 
@@ -18,9 +46,7 @@
                     <legend>
                         Input numbers 1,2,3,4,5,6 or smth like that
                     </legend>
-                 <textarea placeholder="enter data" ng-model="dataset" ng-disabled="loading">
-
-                 </textarea>
+                    <textarea placeholder="enter data" ng-model="dataset" ng-disabled="loading"></textarea>
                     <button
                             ng-disabled="loading"
                             ng-click="analyze()">
@@ -36,7 +62,7 @@
 
         </div>
 
-        <div class="form" ng-class="{ 'loading': loading }" ng-show="correlationMode">
+        <div class="form" ng-class="{ 'loading': loading }" ng-show="!isUnauthorized() && correlationMode">
 
             <h3>Correlation check between two datasets. Each array should contain at least 3 different numbers.</h3>
 
@@ -70,7 +96,7 @@
         </div>
 
 
-        <div class="results">
+        <div class="results" ng-show="!isUnauthorized()">
 
             <h2>
                 Results
@@ -85,7 +111,7 @@
                 <p>Outliers: {{ results.outliers }} </p>
             </div>
             <div ng-show="correlationMode">
-                Correlation results
+                <p> {{ results.correlation }} </p>
             </div>
 
         </div>
