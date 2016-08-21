@@ -8,24 +8,44 @@ class ApplicationController < ActionController::Base
   end
 
   def analyze
-    input = params[:dataset].split(',').map { |x| x.strip.to_i }
-    output = {}
-    output[:min] = input.min
-    output[:max] = input.max
-    output[:average] = input.reduce(:+) * 1.0 / input.size
-    output[:q1] = input.max
-    output[:q3] = input.max
-    output[:median] = input.max
-    output[:outliers] = input.max
-    render json: {
-        average: output[:average],
-        min: output[:min],
-        max: output[:max],
-        q1: output[:q1],
-        q3: output[:q3],
-        median: output[:median],
-        outliers: output[:outliers]
-    }
+    dataset = params[:dataset].to_s.strip
+    if dataset.empty?
+      render json: {
+          message: 'Empty dataset'
+      }, status: 422
+    else
+      dataset = dataset.split(',')
+
+      if dataset.size < 3
+        render json: {
+            message: 'Enter at least 3 numbers'
+        }, status: 422
+      elsif dataset.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
+        render json: {
+            message: 'Wrong data'
+        }, status: 422
+      else
+        input = dataset.map { |num| num.strip.to_i }
+        output = {}
+        output[:min] = input.min
+        output[:max] = input.max
+        output[:average] = input.reduce(:+) * 1.0 / input.size
+        output[:q1] = input.max
+        output[:q3] = input.max
+        output[:median] = input.max
+        output[:outliers] = input.max
+        render json: {
+            average: output[:average],
+            min: output[:min],
+            max: output[:max],
+            q1: output[:q1],
+            q3: output[:q3],
+            median: output[:median],
+            outliers: output[:outliers]
+        }
+      end
+
+    end
   end
 
 
