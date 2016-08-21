@@ -9,7 +9,6 @@
         </button>
 
     </div>
-
     <div class="content">
 
         <div class="form">
@@ -18,10 +17,10 @@
                     <legend>
                         Input numbers 1,2,3,4,5,6 or smth like that
                     </legend>
-                 <textarea>
-                     Enter dataset here
+                 <textarea placeholder="enter data" ng-model="dataset">
+
                  </textarea>
-                    <button>
+                    <button ng-click="analyze()">
                         Analyze
                     </button>
                 </fieldset>
@@ -38,13 +37,13 @@
                 Results
             </h2>
             <div>
-                <p>Average: </p>
-                <p>Min: </p>
-                <p>Max: </p>
-                <p>Q1: </p>
-                <p>Median: </p>
-                <p>Q3: </p>
-                <p>Outliers: </p>
+                <p>Average: {{ results.average }} </p>
+                <p>Min: {{ results.min }} </p>
+                <p>Max: {{ results.max }} </p>
+                <p>Q1: {{ results.q1 }} </p>
+                <p>Median: {{ results.median }} </p>
+                <p>Q3: {{ results.q3 }} </p>
+                <p>Outliers: {{ results.outliers }} </p>
             </div>
 
         </div>

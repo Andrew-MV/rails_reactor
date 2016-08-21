@@ -1,10 +1,11 @@
 var reactorApp = angular.module('reactorApp', ['ngRoute', 'templates']);
 
 reactorApp
-    .config(function($routeProvider, $locationProvider) {
+    .config(function($routeProvider, $locationProvider, $httpProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'homepage.html'
+                templateUrl: 'homepage.html',
+                controller: 'HomePageCtrl'
             })
             .otherwise({
                 templateUrl: '404.html'
@@ -14,5 +15,7 @@ reactorApp
         $locationProvider.html5Mode({
             enabled: true
         });
+
+        $httpProvider.defaults.headers.common['X-CSRF-Token'] = angular.element('meta[name=csrf-token]').attr('content');
 
     });
