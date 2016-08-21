@@ -5,14 +5,16 @@ reactorApp.factory('NotifierSrv', function(notify) {
             notify({
                 message: message,
                 classes: 'cg-notify-message-error',
-                position: 'right'
+                position: 'right',
+                duration: 2000
             });
         },
 
         success: function(message) {
             notify({
                 message: message,
-                position: 'right'
+                position: 'right',
+                duration: 2000
             });
         }
     };
