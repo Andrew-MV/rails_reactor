@@ -9,72 +9,76 @@ class ApplicationController < ActionController::Base
 
   def analyze
     dataset = params[:dataset].to_s.strip
-    if dataset.empty?
+    error_message = validate_data(dataset)[:message].first
+    error_status = validate_data(dataset)[:status]
+    if error_status
       render json: {
-          message: 'Empty dataset'
-      }, status: 422
+          message: error_message
+      }, status: error_status
     else
-      dataset = dataset.split(',')
-
-      if dataset.size < 3
-        render json: {
-            message: 'Enter at least 3 numbers'
-        }, status: 422
-      elsif dataset.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
-        render json: {
-            message: 'Wrong data'
-        }, status: 422
-      else
-        input = dataset.map { |num| num.strip.to_i }
-        output = {}
-        output[:min] = input.min
-        output[:max] = input.max
-        output[:average] = input.reduce(:+) * 1.0 / input.size
-        output[:q1] = input.max
-        output[:q3] = input.max
-        output[:median] = input.max
-        output[:outliers] = input.max
-        render json: {
-            average: output[:average],
-            min: output[:min],
-            max: output[:max],
-            q1: output[:q1],
-            q3: output[:q3],
-            median: output[:median],
-            outliers: output[:outliers]
-        }
-      end
-
+      input = dataset.split(',').map { |num| num.strip.to_i }
+      output = {}
+      output[:min] = input.min
+      output[:max] = input.max
+      output[:average] = input.max
+      output[:q1] = input.max
+      output[:q3] = input.max
+      output[:median] = input.max
+      output[:outliers] = input.max
+      render json: output
     end
   end
 
   def correlate
     dataset1 = params[:dataset1].to_s.strip
+    error_message1 = validate_data(dataset1)[:message].first
+    error_status1 = validate_data(dataset1)[:status]
     dataset2 = params[:dataset2].to_s.strip
-    if dataset1.empty?
+    error_message2 = validate_data(dataset2)[:message].first
+    error_status2 = validate_data(dataset2)[:status]
+    if error_status1
       render json: {
-          message: 'Empty dataset'
-      }, status: 422
+          message: error_message1 + ' in first array'
+      }, status: error_status1
+    elsif error_status2
+      render json: {
+          message: error_message2 + ' in second array'
+      }, status: error_status2
     else
-      dataset1 = dataset1.split(',')
-
-      if dataset1.size < 3
+      input1 = dataset1.split(',').map { |num| num.strip.to_i }
+      input2 = dataset2.split(',').map { |num| num.strip.to_i }
+      if input1.size != input2.size
         render json: {
-            message: 'Enter at least 3 numbers'
-        }, status: 422
-      elsif dataset1.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
-        render json: {
-            message: 'Wrong data'
+            message: 'Arrays should have equal size'
         }, status: 422
       else
-        input1 = dataset1.map { |num| num.strip.to_i }
         output = {}
-        output[:answer] = 'answer'
-        render json: {
-            correlation: output[:answer]
-        }
+        output[:answer] = 'correlation result'
+        render json: output
       end
     end
+  end
+
+  private
+
+  def validate_data(dataset)
+    # todo add correct error messages
+    error = { message: [], status: nil }
+    if dataset.empty?
+      error[:message] << 'Empty dataset'
+      error[:status] = 422
+    else
+      dataset = dataset.split(',')
+      if dataset.size < 3
+        error[:message] << 'Enter at least 3 numbers'
+        error[:status] = 422
+      elsif
+      dataset.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
+        error[:message] << 'Wrong data'
+        error[:status] = 422
+      end
+    end
+    error
   end
 
 end
