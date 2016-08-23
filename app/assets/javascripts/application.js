@@ -17,5 +17,6 @@
 //= require angular-route
 //= require angular-rails-templates
 //= require angular-notify
+//= require angular-cookies
 //= require_tree ../templates
 //= require_tree .

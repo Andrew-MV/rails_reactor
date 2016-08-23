@@ -1,11 +1,26 @@
-var reactorApp = angular.module('reactorApp', ['ngRoute', 'templates', 'cgNotify']);
+var reactorApp = angular.module('reactorApp', ['ngRoute', 'templates', 'cgNotify','ngCookies']);
 
 reactorApp
     .config(function($routeProvider, $locationProvider, $httpProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'homepage.html',
-                controller: 'HomePageCtrl'
+                controller: 'HomePageCtrl',
+                resolve: {
+                    isUserAuthorized: function($q, $rootScope, AuthorizationSrv) {
+                        var defer = $q.defer();
+
+                        AuthorizationSrv
+                            .verifyToken()
+                            .then(function(user) {
+                                $rootScope.user = user;
+                                defer.resolve(true);
+                            })
+                            .catch(function() {
+                                defer.resolve(false);
+                            })
+                    }
+                }
             })
             .otherwise({
                 templateUrl: '404.html'
