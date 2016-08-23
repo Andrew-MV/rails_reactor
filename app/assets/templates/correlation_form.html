@@ -1,0 +1,25 @@
+<div class="form" ng-class="{ 'loading': loading }">
+
+    <h3>Correlation check between two datasets. Each array should contain at least 3 different numbers.</h3>
+
+    <form>
+        <fieldset>
+            <legend>
+                Enter 2 arrays of data of equal length
+            </legend>
+                    <textarea placeholder="enter first array" ng-model="dataset1" ng-disabled="loading"></textarea>
+                    <textarea placeholder="enter second array" ng-model="dataset2" ng-disabled="loading"></textarea>
+            <button
+                    ng-disabled="loading"
+                    ng-click="correlate()">
+                Calculate
+            </button>
+        </fieldset>
+    </form>
+
+    <span class="throbber"></span>
+    <div position="relative">
+
+    </div>
+
+</div>

@@ -1,0 +1,19 @@
+<div class="form" ng-class="{ 'loading': loading }">
+
+    <form>
+        <fieldset>
+            <legend>
+                Input numbers 1,2,3,4,5,6 or smth like that
+            </legend>
+            <textarea placeholder="enter data" ng-model="dataset" ng-disabled="loading"></textarea>
+            <button
+                    ng-disabled="loading"
+                    ng-click="analyze()">
+                Analyze
+            </button>
+        </fieldset>
+    </form>
+
+    <span class="throbber"></span>
+
+</div>

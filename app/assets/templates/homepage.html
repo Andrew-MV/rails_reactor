@@ -1,4 +1,6 @@
+
 <div class="homepage">
+
 
     <div class="header">
         <h1 class="page-title">
@@ -26,8 +28,8 @@
                     <input type="text" placeholder="login" ng-model="login">
                     <input type="password" placeholder="password" ng-model="password">
                     <button
-                        ng-disabled=""
-                        ng-click="signUp()">
+                            ng-disabled=""
+                            ng-click="signUp()">
                         Sign up
                     </button>
                     <button
@@ -39,62 +41,17 @@
             </form>
         </div>
 
-        <div class="form" ng-class="{ 'loading': loading }" ng-show="!isUnauthorized() && analyzeMode">
+        <analyse-form-drv ng-show="!isUnauthorized() && analyzeMode"></analyse-form-drv>
 
-            <form>
-                <fieldset>
-                    <legend>
-                        Input numbers 1,2,3,4,5,6 or smth like that
-                    </legend>
-                    <textarea placeholder="enter data" ng-model="dataset" ng-disabled="loading"></textarea>
-                    <button
-                            ng-disabled="loading"
-                            ng-click="analyze()">
-                        Analyze
-                    </button>
-                </fieldset>
-            </form>
-            <button ng-click="enableCorrelationMode()" ng-show="analyzeMode">
-                Correlation check
-            </button>
+        <button ng-click="enableCorrelationMode()" ng-show="!isUnauthorized() && analyzeMode">
+            Correlation check
+        </button>
 
-            <span class="throbber"></span>
+        <correlation-form-drv ng-show="!isUnauthorized() && correlationMode"></correlation-form-drv>
 
-        </div>
-
-        <div class="form" ng-class="{ 'loading': loading }" ng-show="!isUnauthorized() && correlationMode">
-
-            <h3>Correlation check between two datasets. Each array should contain at least 3 different numbers.</h3>
-
-            <form>
-                <fieldset>
-                    <legend>
-                        Enter 2 arrays of data of equal length
-                    </legend>
-
-                    <textarea placeholder="enter first array" ng-model="dataset1" ng-disabled="loading">
-
-                    </textarea>
-
-                    <textarea placeholder="enter second array" ng-model="dataset2" ng-disabled="loading">
-
-                    </textarea>
-
-                    <button
-                            ng-disabled="loading"
-                            ng-click="correlate()" ng-show="correlationMode">
-                        Calculate
-                    </button>
-                </fieldset>
-            </form>
-            <button ng-click="enableAnalyzeMode()">
-                Back
-            </button>
-
-            <span class="throbber"></span>
-
-        </div>
-
+        <button ng-click="enableAnalyzeMode()" ng-show="!isUnauthorized() && correlationMode">
+            Back
+        </button>
 
         <div class="results" ng-show="!isUnauthorized()">
 
