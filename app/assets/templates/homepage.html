@@ -41,13 +41,13 @@
             </form>
         </div>
 
-        <analyse-form-drv ng-show="!isUnauthorized() && analyzeMode"></analyse-form-drv>
+        <analyse-form-drv ng-show="!isUnauthorized() && analyzeMode" results="results"></analyse-form-drv>
 
         <button ng-click="enableCorrelationMode()" ng-show="!isUnauthorized() && analyzeMode">
             Correlation check
         </button>
 
-        <correlation-form-drv ng-show="!isUnauthorized() && correlationMode"></correlation-form-drv>
+        <correlation-form-drv ng-show="!isUnauthorized() && correlationMode" results="results"></correlation-form-drv>
 
         <button ng-click="enableAnalyzeMode()" ng-show="!isUnauthorized() && correlationMode">
             Back
@@ -68,7 +68,7 @@
                 <p>Outliers: {{ results.outliers }} </p>
             </div>
             <div ng-show="correlationMode">
-                <p> {{ results.correlation }} </p>
+                <p> {{ results.answer }} </p>
             </div>
 
         </div>

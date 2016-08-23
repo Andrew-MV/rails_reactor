@@ -1,7 +1,9 @@
 reactorApp.directive('correlationFormDrv', function(AnalyserSrv, NotifierSrv) {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            results: '='
+        },
         templateUrl: 'correlation_form.html',
         link: function(scope, element, attrs) {
             scope.loading = false;

@@ -1,7 +1,9 @@
 reactorApp.directive('analyseFormDrv', function(AnalyserSrv, NotifierSrv) {
     return {
         restrict: 'E',
-        scope: {},
+        scope: {
+            results: '='
+        },
         templateUrl: 'analyse_form.html',
         link: function(scope, element, attrs) {
             scope.loading = false;
