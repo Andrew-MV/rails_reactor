@@ -1,39 +1,34 @@
 class AuthorizationController < ApplicationController
 
+  include JsonApiErrors
+
   def sign_up
     user = User.new(user_params)
     if user.save
-      output = {}
-      authorization_token = "#{user.id}_#{user.password}"
-      output[:authorization_token] = session[:authorization_token] = authorization_token
-      output[:user] = user
-      render json: output.to_json
+      session[:authorization_token] = user.authorization_token
+      render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
     else
-      render json: {
-          message: 'Not valid user\'s data'
-      }, status: 422
+      render json: to_json_api_errors(:user_exists), status: 422
     end
   end
 
   def sign_in
     user = User.find_by(user_params)
     if user
-      output = {}
-      authorization_token = "#{user.id}_#{user.password}"
-      output[:authorization_token] = session[:authorization_token] = authorization_token
-      output[:user] = user
-      render json: output.to_json
+      session[:authorization_token] = user.authorization_token
+      render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
     else
-      render json: {
-          message: 'User not found'
-      }, status: 404 # todo find correct error code
+      render json: to_json_api_errors(:invalid_login_or_password), status: 404
+      # todo find correct error code
     end
   end
 
   def log_out
     session.delete(:authorization_token)
     render json: {
-        message: 'logged out'
+        meta: {
+            message: 'logged out'
+        }
     }
   end
 
@@ -42,17 +37,21 @@ class AuthorizationController < ApplicationController
       user_id = session[:authorization_token].split('_').first
       user = User.find(user_id)
       if user
-        render json: {
-            user: user
-        }
+        render json: user.to_json_api_schema
       else
         render json: {
-            message: 'user not found'
-        }
+            errors: [{
+                message: 'user not found',
+                status: 422
+            }]
+        }, status: 422
       end
     else
       render json: {
-          message: 'invalid token'
+          errors: [{
+              message: 'invalid token',
+              status: 422
+          }]
       }, status: 422
     end
   end

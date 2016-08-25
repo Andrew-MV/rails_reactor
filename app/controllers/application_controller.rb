@@ -4,15 +4,18 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   respond_to :json, :html
 
+
   def index
   end
 
   def analyze
+    # response.headers['Content-Type'] = 'application/vnd.api+json'
     dataset = params[:dataset].to_s.strip
     error_message = validate_data(dataset)[:message].first
     error_status = validate_data(dataset)[:status]
     if error_status
       render json: {
+      # todo make according to json api
           message: error_message
       }, status: error_status
     else
@@ -26,10 +29,12 @@ class ApplicationController < ActionController::Base
       output[:median] = find_median(input)
       output[:outliers] = find_outliers(input)
       render json: output
+      # todo make according to json api
     end
   end
 
   def correlate
+    # response.headers['Content-Type'] = 'application/vnd.api+json'
     dataset1 = params[:dataset1].to_s.strip
     error_message1 = validate_data(dataset1)[:message].first
     error_status1 = validate_data(dataset1)[:status]
@@ -38,10 +43,12 @@ class ApplicationController < ActionController::Base
     error_status2 = validate_data(dataset2)[:status]
     if error_status1
       render json: {
+          # todo make according to json api
           message: error_message1 + ' in first array'
       }, status: error_status1
     elsif error_status2
       render json: {
+          # todo make according to json api
           message: error_message2 + ' in second array'
       }, status: error_status2
     else
@@ -49,12 +56,14 @@ class ApplicationController < ActionController::Base
       input2 = dataset2.split(',').map { |num| num.strip.to_i }
       if input1.size != input2.size
         render json: {
+            # todo make according to json api
             message: 'Arrays should have equal size'
         }, status: 422
       else
         output = {}
         output[:answer] = find_correlation(input1, input2).round(3)
         render json: output
+        # todo make according to json api
       end
     end
   end

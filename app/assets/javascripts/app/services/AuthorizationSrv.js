@@ -1,4 +1,4 @@
-reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies) {
+reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies, ResponseErrorSrv) {
 
     return {
         verifyToken: function() {
@@ -6,9 +6,9 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies)
             $http.post('api/verify-token', {
                 authorization_token: $cookies.get('authorization_token')
             }).then(function (response) {
-                defer.resolve(response.data);
-            }).catch(function (error) {
-                defer.reject(error.data.message);
+                defer.resolve(response);
+            }).catch(function (response) {
+                defer.reject(ResponseErrorSrv.getTitle(response));
             });
             return defer.promise;
         },
@@ -20,10 +20,10 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies)
                 password: password
             }).then(function (response) {
                 $rootScope.user = response.data.user;
-                $cookies.put('authorization_token', response.data.authorization_token);
+                $cookies.put('authorization_token', response.data.meta.authorization_token);
                 defer.resolve(response.data);
-            }).catch(function (error) {
-                defer.reject(error.data.message);
+            }).catch(function (response) {
+                defer.reject(ResponseErrorSrv.getTitle(response));
             });
             return defer.promise;
         },
@@ -35,10 +35,10 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies)
                 password: password
             }).then(function (response) {
                 $rootScope.user = response.data.user;
-                $cookies.put('authorization_token', response.data.authorization_token);
+                $cookies.put('authorization_token', response.data.meta.authorization_token);
                 defer.resolve(true);
-            }).catch(function (error) {
-                defer.reject(error.data.message);
+            }).catch(function (response) {
+                defer.reject(ResponseErrorSrv.getTitle(response));
             });
             return defer.promise;
         },
@@ -51,8 +51,8 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies)
                     $cookies.remove('authorization_token');
                     $rootScope.user = null;
                 })
-                .catch(function (error) {
-                    defer.reject(error.data.message);
+                .catch(function (response) {
+                    defer.reject(ResponseErrorSrv.getTitle(response));
                 });
             return defer.promise;
         }
