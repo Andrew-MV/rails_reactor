@@ -4,6 +4,10 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   respond_to :json, :html
 
+  include JsonApiHeaders
+
+  before_action :set_content_type, only: [:analyze, :correlate]
+
 
   def index
   end

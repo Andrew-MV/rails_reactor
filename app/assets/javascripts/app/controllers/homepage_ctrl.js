@@ -17,32 +17,6 @@ reactorApp.controller('HomePageCtrl', function($scope, $http, AnalyserSrv, Notif
         $scope.correlationMode = true;
     };
 
-    $scope.signUp = function() {
-        AuthorizationSrv
-            .signUp($scope.login, $scope.password)
-            .then(function() {
-                NotifierSrv.success('Signed up')
-            })
-            .catch(function(message) {
-                NotifierSrv.error(message)
-            })
-            .finally(function() {
-            });
-    };
-
-    $scope.signIn = function() {
-        AuthorizationSrv
-            .signIn($scope.login, $scope.password)
-            .then(function() {
-                NotifierSrv.success('Signed in')
-            })
-            .catch(function(message) {
-                NotifierSrv.error(message)
-            })
-            .finally(function() {
-            });
-    };
-
     $scope.logOut = function() {
         AuthorizationSrv
             .logOut()

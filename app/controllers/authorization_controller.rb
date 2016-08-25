@@ -1,6 +1,11 @@
 class AuthorizationController < ApplicationController
 
+  respond_to :json, :html
+
   include JsonApiErrors
+  include JsonApiHeaders
+
+  before_action :set_content_type, only: [:sign_up, :sign_in, :log_out, :verify_token]
 
   def sign_up
     user = User.new(user_params)

@@ -1,0 +1,40 @@
+<div class="authorization">
+
+    <div class="tabs">
+        <span ng-click="switchMode()" ng-show="mode.signin">Sign up</span>
+        <span ng-click="switchMode()" ng-show="mode.signup">Sign in</span>
+    </div><br>
+
+
+    <form>
+        <fieldset>
+
+            <legend ng-show="mode.signup">
+                Sign up
+            </legend>
+
+            <legend ng-show="mode.signin">
+                Sign in
+            </legend>
+
+            <input type="text" placeholder="login" ng-model="login">
+
+            <input type="password" placeholder="password" ng-model="password">
+
+            <button
+                    ng-disabled=""
+                    ng-show="mode.signup"
+                    ng-click="signUp()">
+                Sign up
+            </button>
+
+            <button
+                    ng-disabled=""
+                    ng-show="mode.signin"
+                    ng-click="signIn()">
+                Sign in
+            </button>
+
+        </fieldset>
+    </form>
+</div>

@@ -13,33 +13,7 @@
     </div>
     <div class="content">
 
-        <div class="authorization" ng-show="isUnauthorized()">
-
-            <div class="tabs">
-                <span>Sign up</span>
-                <span>Sign in</span>
-            </div>
-
-            <form>
-                <fieldset>
-                    <legend>
-                        Sign up
-                    </legend>
-                    <input type="text" placeholder="login" ng-model="login">
-                    <input type="password" placeholder="password" ng-model="password">
-                    <button
-                            ng-disabled=""
-                            ng-click="signUp()">
-                        Sign up
-                    </button>
-                    <button
-                            ng-disabled=""
-                            ng-click="signIn()">
-                        Sign in
-                    </button>
-                </fieldset>
-            </form>
-        </div>
+        <authorization-form-drv ng-show="isUnauthorized()"></authorization-form-drv>
 
         <analyse-form-drv ng-show="!isUnauthorized() && analyzeMode" results="results"></analyse-form-drv>
 
