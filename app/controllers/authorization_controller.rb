@@ -40,6 +40,7 @@ class AuthorizationController < ApplicationController
         render json: user.to_json_api_schema
       else
         render json: {
+            # todo according to json api
             errors: [{
                 message: 'user not found',
                 status: 422
@@ -48,6 +49,7 @@ class AuthorizationController < ApplicationController
       end
     else
       render json: {
+          # todo according to json api
           errors: [{
               message: 'invalid token',
               status: 422

@@ -1,4 +1,4 @@
-reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies, ResponseErrorSrv) {
+reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies, ResponseErrorSrv, ResponseSuccessSrv) {
 
     return {
         verifyToken: function() {
@@ -6,7 +6,7 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
             $http.post('api/verify-token', {
                 authorization_token: $cookies.get('authorization_token')
             }).then(function (response) {
-                defer.resolve(response);
+                defer.resolve(ResponseSuccessSrv.getMeta(response));
             }).catch(function (response) {
                 defer.reject(ResponseErrorSrv.getTitle(response));
             });
@@ -19,9 +19,9 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
                 login: login,
                 password: password
             }).then(function (response) {
-                $rootScope.user = response.data.user;
-                $cookies.put('authorization_token', response.data.meta.authorization_token);
-                defer.resolve(response.data);
+                $rootScope.user = ResponseSuccessSrv.getUser(response);
+                $cookies.put('authorization_token', ResponseSuccessSrv.getMeta(response).authorization_token);
+                defer.resolve(ResponseSuccessSrv.getMeta(response));
             }).catch(function (response) {
                 defer.reject(ResponseErrorSrv.getTitle(response));
             });
@@ -34,9 +34,9 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
                 login: login,
                 password: password
             }).then(function (response) {
-                $rootScope.user = response.data.user;
-                $cookies.put('authorization_token', response.data.meta.authorization_token);
-                defer.resolve(true);
+                $rootScope.user = ResponseSuccessSrv.getUser(response);
+                $cookies.put('authorization_token', ResponseSuccessSrv.getMeta(response).authorization_token);
+                defer.resolve(ResponseSuccessSrv.getUser(response));
             }).catch(function (response) {
                 defer.reject(ResponseErrorSrv.getTitle(response));
             });
@@ -46,8 +46,8 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
         logOut: function() {
             var defer = $q.defer();
             $http.post('api/log-out', { })
-                .then(function (response) {
-                    defer.resolve(response.data);
+                .then(function () {
+                    defer.resolve();
                     $cookies.remove('authorization_token');
                     $rootScope.user = null;
                 })
