@@ -33,6 +33,5 @@ reactorApp
 
         $httpProvider.defaults.headers.common['X-CSRF-Token'] = angular.element('meta[name=csrf-token]').attr('content');
         $httpProvider.defaults.headers.post['Content-Type'] = 'application/vnd.api+json'
-        // $httpProvider.defaults.transformResponse(config, ).headers.post['Content-Type'] = 'application/vnd.api+json'
-        
+
     });

@@ -4,7 +4,7 @@ reactorApp.factory('ResponseSuccessSrv', function() {
 
     function validateJsonApiSchema(response) {
         return angular.isDefined(response.data)
-            && angular.isDefined(response.data.data)
+            // && angular.isDefined(response.data.data)
             && angular.isDefined(response.data.meta);
     }
 

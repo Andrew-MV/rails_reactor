@@ -8,8 +8,6 @@ class User < ActiveRecord::Base
     "#{self.id}_#{self.login}"
   end
 
-  private
-
   def json_api_schema_attributes
     {
         login: self.login

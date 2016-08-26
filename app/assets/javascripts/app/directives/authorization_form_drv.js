@@ -4,7 +4,6 @@ reactorApp.directive('authorizationFormDrv', function(AuthorizationSrv, Notifier
         scope: {
             results: '='
         },
-        // todo write correct template
         templateUrl: 'authorization_form.html',
         link: function(scope, element, attrs) {
             scope.mode = {

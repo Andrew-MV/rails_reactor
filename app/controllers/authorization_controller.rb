@@ -2,8 +2,8 @@ class AuthorizationController < ApplicationController
 
   respond_to :json, :html
 
-  include JsonApiErrors
   include JsonApiHeaders
+  include JsonApiErrors
 
   before_action :set_content_type, only: [:sign_up, :sign_in, :log_out, :verify_token]
 
@@ -18,7 +18,7 @@ class AuthorizationController < ApplicationController
   end
 
   def sign_in
-    user = User.find_by(user_params)
+    user = User.find_by(user_params) if (user_params[:password] && user_params[:login])
     if user
       session[:authorization_token] = user.authorization_token
       render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
@@ -38,35 +38,23 @@ class AuthorizationController < ApplicationController
   end
 
   def verify_token
-    if (session[:authorization_token].to_s == params[:authorization_token].to_s) && (params[:authorization_token].to_s != '')
+    if (session[:authorization_token].to_s == params[:meta][:authorization_token].to_s) && (params[:meta][:authorization_token].to_s != '')
       user_id = session[:authorization_token].split('_').first
       user = User.find(user_id)
       if user
         render json: user.to_json_api_schema
       else
-        render json: {
-            # todo according to json api
-            errors: [{
-                message: 'user not found',
-                status: 422
-            }]
-        }, status: 422
+        render json: to_json_api_errors(:user_not_found), status: 422
       end
     else
-      render json: {
-          # todo according to json api
-          errors: [{
-              message: 'invalid token',
-              status: 422
-          }]
-      }, status: 422
+      render json: to_json_api_errors(:invalid_token), status: 422
     end
   end
 
   private
 
   def user_params
-    params.permit(:login, :password)
+    params[:meta].permit(:login, :password)
   end
 
 end

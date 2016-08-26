@@ -7,17 +7,25 @@ module JsonApiErrors
     {
         errors: {
             user_exists: {
-                title: 'User already exists',
+                title: 'This login is already taken or is invalid',
                 status: 404
             },
             invalid_login_or_password: {
                 title: 'Invalid login or password',
                 status: 404
+            },
+            user_not_found: {
+                title: 'User not found',
+                status: 422
+            },
+            invalid_token: {
+                title: 'Invalid token',
+                status: 422
+            },
+            wrong_data: {
+                title: 'Wrong data',
+                status: 422
             }
-            # error_3: {
-            #     title: 'User not found_3',
-            #     status: 404
-            # },
         }.slice(*error_types).values.to_a
     }
 

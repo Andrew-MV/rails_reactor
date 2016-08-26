@@ -4,7 +4,9 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
         verifyToken: function() {
             var defer = $q.defer();
             $http.post('api/verify-token', {
-                authorization_token: $cookies.get('authorization_token')
+                meta: {
+                    authorization_token: $cookies.get('authorization_token')
+                }
             }).then(function (response) {
                 defer.resolve(ResponseSuccessSrv.getMeta(response));
             }).catch(function (response) {
@@ -16,12 +18,15 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
         signUp: function(login, password) {
             var defer = $q.defer();
             $http.post('api/sign-up', {
-                login: login,
-                password: password
+                meta: {
+                    login: login,
+                    password: password
+                }
             }).then(function (response) {
                 $rootScope.user = ResponseSuccessSrv.getUser(response);
-                $cookies.put('authorization_token', ResponseSuccessSrv.getMeta(response).authorization_token);
-                defer.resolve(ResponseSuccessSrv.getMeta(response));
+                $rootScope.meta = ResponseSuccessSrv.getMeta(response);
+                $cookies.put('authorization_token', $rootScope.meta.authorization_token);
+                defer.resolve($rootScope.user);
             }).catch(function (response) {
                 defer.reject(ResponseErrorSrv.getTitle(response));
             });
@@ -31,12 +36,15 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
         signIn: function(login, password) {
             var defer = $q.defer();
             $http.post('api/sign-in', {
-                login: login,
-                password: password
+                meta: {
+                    login: login,
+                    password: password
+                }
             }).then(function (response) {
                 $rootScope.user = ResponseSuccessSrv.getUser(response);
-                $cookies.put('authorization_token', ResponseSuccessSrv.getMeta(response).authorization_token);
-                defer.resolve(ResponseSuccessSrv.getUser(response));
+                $rootScope.meta = ResponseSuccessSrv.getMeta(response);
+                $cookies.put('authorization_token', $rootScope.meta.authorization_token);
+                defer.resolve($rootScope.user);
             }).catch(function (response) {
                 defer.reject(ResponseErrorSrv.getTitle(response));
             });
@@ -45,11 +53,12 @@ reactorApp.factory('AuthorizationSrv', function($http, $q, $rootScope, $cookies,
 
         logOut: function() {
             var defer = $q.defer();
-            $http.post('api/log-out', { })
+            $http.post('api/log-out', { meta: {} })
                 .then(function () {
                     defer.resolve();
                     $cookies.remove('authorization_token');
                     $rootScope.user = null;
+                    $rootScope.meta = null;
                 })
                 .catch(function (response) {
                     defer.reject(ResponseErrorSrv.getTitle(response));

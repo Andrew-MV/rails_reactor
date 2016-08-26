@@ -18,6 +18,7 @@ reactorApp.directive('analyseFormDrv', function(AnalyserSrv, NotifierSrv) {
                         scope.results = result;
                     })
                     .catch(function(message) {
+                        scope.results = {};
                         NotifierSrv.error(message);
                     })
                     .finally(function() {

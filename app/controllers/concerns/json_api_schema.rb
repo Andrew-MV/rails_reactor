@@ -12,7 +12,6 @@ module JsonApiSchema
         },
 
         meta: meta
-
     }
 
   end

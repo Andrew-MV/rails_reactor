@@ -5,6 +5,7 @@ class ApplicationController < ActionController::Base
   respond_to :json, :html
 
   include JsonApiHeaders
+  include JsonApiErrors
 
   before_action :set_content_type, only: [:analyze, :correlate]
 
@@ -13,15 +14,10 @@ class ApplicationController < ActionController::Base
   end
 
   def analyze
-    # response.headers['Content-Type'] = 'application/vnd.api+json'
-    dataset = params[:dataset].to_s.strip
-    error_message = validate_data(dataset)[:message].first
-    error_status = validate_data(dataset)[:status]
-    if error_status
-      render json: {
-      # todo make according to json api
-          message: error_message
-      }, status: error_status
+    dataset = params[:meta][:dataset].to_s.strip
+    error_presence = validate_data(dataset)
+    if error_presence
+      render json: to_json_api_errors(:wrong_data), status: 422
     else
       input = dataset.split(',').map { |num| num.strip.to_i }
       output = {}
@@ -32,42 +28,29 @@ class ApplicationController < ActionController::Base
       output[:q3] = find_q3(input)
       output[:median] = find_median(input)
       output[:outliers] = find_outliers(input)
-      render json: output
-      # todo make according to json api
+      render json: {
+          meta: output
+      }
     end
   end
 
   def correlate
-    # response.headers['Content-Type'] = 'application/vnd.api+json'
-    dataset1 = params[:dataset1].to_s.strip
-    error_message1 = validate_data(dataset1)[:message].first
-    error_status1 = validate_data(dataset1)[:status]
-    dataset2 = params[:dataset2].to_s.strip
-    error_message2 = validate_data(dataset2)[:message].first
-    error_status2 = validate_data(dataset2)[:status]
-    if error_status1
-      render json: {
-          # todo make according to json api
-          message: error_message1 + ' in first array'
-      }, status: error_status1
-    elsif error_status2
-      render json: {
-          # todo make according to json api
-          message: error_message2 + ' in second array'
-      }, status: error_status2
+    dataset1 = params[:meta][:dataset1].to_s.strip
+    error_presence_1 = validate_data(dataset1)
+    dataset2 = params[:meta][:dataset2].to_s.strip
+    error_presence_2 = validate_data(dataset2)
+    if error_presence_1 || error_presence_2
+      render json: to_json_api_errors(:wrong_data), status: 422
     else
       input1 = dataset1.split(',').map { |num| num.strip.to_i }
       input2 = dataset2.split(',').map { |num| num.strip.to_i }
-      if input1.size != input2.size
-        render json: {
-            # todo make according to json api
-            message: 'Arrays should have equal size'
-        }, status: 422
+      if (input1.size != input2.size) || (input1.uniq.size == 1) || (input2.uniq.size == 1)
+        render json: to_json_api_errors(:wrong_data), status: 422
       else
-        output = {}
-        output[:answer] = find_correlation(input1, input2).round(3)
-        render json: output
-        # todo make according to json api
+        output = { answer: find_correlation(input1, input2).round(3) }
+        render json: {
+            meta: output
+        }
       end
     end
   end
@@ -76,22 +59,19 @@ class ApplicationController < ActionController::Base
 
   def validate_data(dataset)
     # todo add correct error messages
-    error = { message: [], status: nil }
+    errors = false
     if dataset.empty?
-      error[:message] << 'Empty dataset'
-      error[:status] = 422
+      errors = true
     else
       dataset = dataset.split(',')
       if dataset.size < 3
-        error[:message] << 'Enter at least 3 numbers'
-        error[:status] = 422
+        errors = true
       elsif
       dataset.any? { |num| !/\A[-+]?\d+\z/.match(num.strip) }
-        error[:message] << 'Wrong data'
-        error[:status] = 422
+        errors = true
       end
     end
-    error
+    errors
   end
 
   def find_average(array)
