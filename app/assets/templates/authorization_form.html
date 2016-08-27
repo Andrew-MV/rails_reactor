@@ -1,10 +1,9 @@
 <div class="authorization">
 
     <div class="tabs">
-        <span ng-click="switchMode()" ng-show="mode.signin">Sign up</span>
-        <span ng-click="switchMode()" ng-show="mode.signup">Sign in</span>
-    </div><br>
-
+        <span class="auth_link" ng-click="switchMode()" ng-show="mode.signin">Click here to sign up</span>
+        <span class="auth_link" ng-click="switchMode()" ng-show="mode.signup">Click here to sign in</span>
+    </div><br><br>
 
     <form>
         <fieldset>
@@ -22,14 +21,12 @@
             <input type="password" placeholder="password" ng-model="password">
 
             <button
-                    ng-disabled=""
                     ng-show="mode.signup"
                     ng-click="signUp()">
                 Sign up
             </button>
 
             <button
-                    ng-disabled=""
                     ng-show="mode.signin"
                     ng-click="signIn()">
                 Sign in

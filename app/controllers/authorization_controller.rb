@@ -13,7 +13,7 @@ class AuthorizationController < ApplicationController
       session[:authorization_token] = user.authorization_token
       render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
     else
-      render json: to_json_api_errors(:user_exists), status: 422
+      render json: to_json_api_errors(:user_exists), status: 400
     end
   end
 
@@ -23,7 +23,7 @@ class AuthorizationController < ApplicationController
       session[:authorization_token] = user.authorization_token
       render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
     else
-      render json: to_json_api_errors(:invalid_login_or_password), status: 404
+      render json: to_json_api_errors(:invalid_login_or_password), status: 400
     end
   end
 
@@ -43,10 +43,10 @@ class AuthorizationController < ApplicationController
       if user
         render json: user.to_json_api_schema
       else
-        render json: to_json_api_errors(:user_not_found), status: 422
+        render json: to_json_api_errors(:user_not_found), status: 404
       end
     else
-      render json: to_json_api_errors(:invalid_token), status: 422
+      render json: to_json_api_errors(:invalid_token), status: 400
     end
   end
 

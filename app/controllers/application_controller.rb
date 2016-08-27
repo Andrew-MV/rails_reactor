@@ -9,7 +9,6 @@ class ApplicationController < ActionController::Base
 
   before_action :set_content_type, only: [:analyze, :correlate]
 
-
   def index
   end
 
@@ -17,7 +16,7 @@ class ApplicationController < ActionController::Base
     dataset = params[:meta][:dataset].to_s.strip
     error_presence = validate_data(dataset)
     if error_presence
-      render json: to_json_api_errors(:wrong_data), status: 422
+      render json: to_json_api_errors(:wrong_data), status: 400
     else
       input = dataset.split(',').map { |num| num.strip.to_i }
       output = {}
@@ -40,12 +39,12 @@ class ApplicationController < ActionController::Base
     dataset2 = params[:meta][:dataset2].to_s.strip
     error_presence_2 = validate_data(dataset2)
     if error_presence_1 || error_presence_2
-      render json: to_json_api_errors(:wrong_data), status: 422
+      render json: to_json_api_errors(:wrong_data), status: 400
     else
       input1 = dataset1.split(',').map { |num| num.strip.to_i }
       input2 = dataset2.split(',').map { |num| num.strip.to_i }
       if (input1.size != input2.size) || (input1.uniq.size == 1) || (input2.uniq.size == 1)
-        render json: to_json_api_errors(:wrong_data), status: 422
+        render json: to_json_api_errors(:wrong_data), status: 400
       else
         output = { answer: find_correlation(input1, input2).round(3) }
         render json: {
