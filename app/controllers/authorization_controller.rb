@@ -24,7 +24,6 @@ class AuthorizationController < ApplicationController
       render json: user.to_json_api_schema({ authorization_token: user.authorization_token })
     else
       render json: to_json_api_errors(:invalid_login_or_password), status: 404
-      # todo find correct error code
     end
   end
 

@@ -58,7 +58,6 @@ class ApplicationController < ActionController::Base
   private
 
   def validate_data(dataset)
-    # todo add correct error messages
     errors = false
     if dataset.empty?
       errors = true
