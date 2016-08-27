@@ -18,7 +18,7 @@ class AuthorizationController < ApplicationController
   end
 
   def sign_in
-    user = User.find_by(user_params) if (user_params[:password] && user_params[:login])
+    user = User.authenticate(params[:meta][:login], params[:meta][:password])
     if user
       session[:authorization_token] = user.authorization_token
       render json: user.to_json_api_schema({ authorization_token: user.authorization_token })

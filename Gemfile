@@ -13,6 +13,7 @@ gem 'haml-rails', '~> 0.9'
 gem 'bower-rails', '~> 0.10.0'
 gem 'angular-rails-templates'
 gem 'responders'
+gem 'bcrypt-ruby', :require => 'bcrypt'
 
 group :development, :test do
   gem 'byebug'
