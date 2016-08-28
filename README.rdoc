@@ -8,14 +8,15 @@ Things you may want to cover:
 * Ruby version 2.2.2
 * Rails version 4.2.1
 
-* Getting started
-1. In command line enter your app directory and run:
- bundle install
- rake bower:install
+== Getting started
+* In command line enter your app directory and run:
+ $ bundle install
+ $ rake bower:install
  type !2 if asked
-2. Start your web-server by executing rails s in a command line
-3. Enjoy
+* Start your web-server by executing rails s in a command line
+* Enjoy
 
+== Other
 * System dependencies
 
 * Configuration
